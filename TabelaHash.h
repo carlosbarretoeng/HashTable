@@ -51,6 +51,7 @@ public:
     void remover(int valor) {
         int chave = funcaoDeDispersao(valor, this->M);
         if(!this->tabela[chave].emUso){
+            cout << "VALOR NAO LOCALIZADO" << endl;
             return;
         }
         this->tabela[chave].lista->remover(valor);

@@ -1,10 +1,8 @@
 #include "TabelaHash.h"
 
-#include "Lista.h"
-
 void adicionarElementoNaTabela(TabelaHash *tabelaHash) {
     int elemento;
-    cout << "QUAL VALOR DESEJA ADICIONA A TABELA?";
+    cout << "QUAL VALOR DESEJA ADICIolkfujsldfkjslfkjsldjkfONA A TABELA?";
     cin >> elemento;
     tabelaHash->adicionar(elemento);
 }
@@ -74,7 +72,7 @@ int main() {
                 cout << "Fator de Carga: " << tabelaHash->obterFatorDeCarga() << endl;
                 break;
             default:
-                cout << "OPCAO INVALIDA. TENTE NOVAMENTE" << flush;
+                cout << "OPCAO INVALIDA. TENTE NOVAMENTE" << endl;
         }
     } while (opcoes != 0);
 
