@@ -1,95 +1,68 @@
 #ifndef COMPUTACAO_TABELAHASH_H
 #define COMPUTACAO_TABELAHASH_H
 
-#define funcaoDeDispersao(valor, slots) (valor % slots)
-
 #include <iostream>
-#include <iomanip>
 #include <cstring>
-#include <vector>
 
-#include "Lista.h"
+#include "TabelaHashEncadeamentoExterior.h"
+#include "TabelaHashEncadeamentoInterior.h"
+#include "TabelaHashDuploHash.h"
 
 using namespace std;
 
-class ElementoHash {
-public:
-    bool emUso;
-    int chave;
-    Lista *lista;
-
-    ElementoHash(){
-        emUso = false;
-        chave = 0;
-        lista = new Lista();
-    }
-};
-
 class TabelaHash {
-private:
-    int M;
-    vector<ElementoHash> tabela;
+    int tipoDeTabelaHash = 0;
+    TabelaHashEncadeamentoInterior *hashInterior = nullptr;
+    TabelaHashEncadeamentoExterior *hashExterior = nullptr;
+    TabelaHashDuploHash *hashDuploHash = nullptr;
+
 public:
-    TabelaHash(int slots) {
-        this->M = slots;
-        for(int i=0; i<slots; i++){
-            tabela.emplace_back();
+    TabelaHash(){
+        int opcoes;
+        cout << "------------------------------------------" << endl;
+        cout << "[   INFO] QUAL ESTRUTURA DE TABELA HASH QUER USAR?" << endl;
+        cout << "[   INFO] 0 - ENCERRAR O PROGRAMA" << endl;
+        cout << "[   INFO] 1 - ENCADEAMENTO EXTERNO POR LISTA" << endl;
+        cout << "[   INFO] 2 - ENCADEAMENTO INTERNO" << endl;
+        cout << "[   INFO] 3 - DUPLO HASH" << endl;
+        cin >> opcoes;
+
+        if(opcoes <= 0 || opcoes > 3) {
+            exit(0);
         }
+
+        this->tipoDeTabelaHash = opcoes;
+
+        if(this->tipoDeTabelaHash == 1) hashExterior = new TabelaHashEncadeamentoExterior();
+        if(this->tipoDeTabelaHash == 2) hashInterior = new TabelaHashEncadeamentoInterior();
+        if(this->tipoDeTabelaHash == 3) hashDuploHash = new TabelaHashDuploHash();
     }
 
-    void adicionar(int valor) {
-        int chave = funcaoDeDispersao(valor, this->M);
-        if(this->tabela[chave].emUso){
-            cout << "[ALERTA] COLISAO NA CHAVE " << chave << endl;
-        }else{
-            this->tabela[chave].emUso = true;
-            this->tabela[chave].chave = chave;
-        }
-        this->tabela[chave].lista->adicionar(valor);
+    void adicionar(int valor){
+        if(this->tipoDeTabelaHash == 1) hashExterior->adicionar(valor);
+        if(this->tipoDeTabelaHash == 2) hashInterior->adicionar(valor);
+        if(this->tipoDeTabelaHash == 3) hashDuploHash->adicionar(valor);
     }
 
-    void remover(int valor) {
-        int chave = funcaoDeDispersao(valor, this->M);
-        if(!this->tabela[chave].emUso){
-            cout << "VALOR NAO LOCALIZADO" << endl;
-            return;
-        }
-        this->tabela[chave].lista->remover(valor);
-        if(this->tabela[chave].lista->vazia()){
-            this->tabela[chave].emUso = false;
-        }
+    void remover(int valor){
+        if(this->tipoDeTabelaHash == 1) hashExterior->remover(valor);
+        if(this->tipoDeTabelaHash == 2) hashInterior->remover(valor);
+        if(this->tipoDeTabelaHash == 3) hashDuploHash->remover(valor);
     }
 
-    bool localizar(int valor) {
-        int chave = funcaoDeDispersao(valor, this->M);
-        if(!this->tabela[chave].emUso){
-            return false;
-        }
-        return this->tabela[chave].lista->localizar(valor);
+    void imprimir(){
+        if(this->tipoDeTabelaHash == 1) hashExterior->imprimir();
+        if(this->tipoDeTabelaHash == 2) hashInterior->imprimir();
+        if(this->tipoDeTabelaHash == 3) hashDuploHash->imprimir();
     }
 
-    float obterFatorDeCarga() {
-        int N = 0;
-        for(int i=0; i<this->M; i++){
-            if (this->tabela[i].emUso){
-                N++;
-            }
-        }
-        return ((float) N / (float)this->M);
-    }
-
-    void imprimir() {
-        for(int i=0; i<this->M; i++){
-            string chave = "  ";
-            if(this->tabela[i].emUso){
-                chave = to_string(this->tabela[i].chave);
-            }
-            cout << setw(2) << chave << " ~> ";
-            this->tabela[i].lista->imprimir();
-            cout << endl;
-        }
+    bool localizar(int valor){
+        if(this->tipoDeTabelaHash == 1) return hashExterior->localizar(valor);
+        if(this->tipoDeTabelaHash == 2) return hashInterior->localizar(valor);
+        if(this->tipoDeTabelaHash == 3) return hashDuploHash->localizar(valor);
+        return false;
     }
 };
 
 
-#endif
+#endif //COMPUTACAO_TABELAHASH_H

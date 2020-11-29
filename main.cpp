@@ -1,78 +1,48 @@
 #include "TabelaHash.h"
 
-void adicionarElementoNaTabela(TabelaHash *tabelaHash) {
-    int elemento;
-    cout << "QUAL VALOR DESEJA ADICIolkfujsldfkjslfkjsldjkfONA A TABELA?";
-    cin >> elemento;
-    tabelaHash->adicionar(elemento);
-}
-
-void removerElementoNaTabela(TabelaHash *tabelaHash) {
-    int elemento;
-    cout << "QUAL VALOR DESEJA REMOVER DA TABELA?";
-    cin >> elemento;
-    tabelaHash->remover(elemento);
-}
-
-void localizarElementoNaTabela(TabelaHash *tabelaHash) {
-    int elemento;
-    cout << "QUAL VALOR DESEJA LOCALIZAR NA TABELA?";
-    cin >> elemento;
-    if(tabelaHash->localizar(elemento)){
-        cout << "ELEMENTO PRESENTE NA TABELA" << endl;
-    }else{
-        cout << "ELEMENTO AUSENTE DA TABELA" << endl;
-    }
-}
-
 int main() {
-    int slots = 0;
-    int opcoes = 0;
-
-    // Obtem o número de slots da tabela hash
-    do{
-        cout << "QUANTOS SLOTS EXISTIRAO NA TABELA HASH? (1...100)" << endl;
-        cin >> slots;
-
-        if (slots < 1 || slots > 100) {
-            cout << "VALOR INVALIDO. POR FAVOR ATENHA-SE AOS LIMITES." << endl;
-        }
-    } while (slots < 1 || slots > 100);
-
-    // Instancia a tabela
-    auto *tabelaHash = new TabelaHash(slots);
+    int opcoes;
+    auto *tabelaHash = new TabelaHash();
 
     // Operações sobre a tabela;
     do {
-        cout << "O QUE DESEJA FAZER?" << endl;
-        cout << "0 - ENCERRAR O PROGRAMA" << endl;
-        cout << "1 - ADICIONAR ELEMENTO NA TABELA" << endl;
-        cout << "2 - EXCLUIR ELEMENTO NA TABELA" << endl;
-        cout << "3 - PROCURAR ELEMENTO NA TABELA" << endl;
-        cout << "4 - VISUALIZAR A TABELA" << endl;
-        cout << "5 - FATOR DE CARGA DA TABELA" << endl;
+        cout << "------------------------------------------" << endl;
+        cout << "[   INFO] O QUE DESEJA FAZER?" << endl;
+        cout << "[   INFO] 0 - ENCERRAR O PROGRAMA" << endl;
+        cout << "[   INFO] 1 - ADICIONAR ELEMENTO NA TABELA" << endl;
+        cout << "[   INFO] 2 - EXCLUIR ELEMENTO NA TABELA" << endl;
+        cout << "[   INFO] 3 - PROCURAR ELEMENTO NA TABELA" << endl;
+        cout << "[   INFO] 4 - VISUALIZAR A TABELA" << endl;
         cin >> opcoes;
 
+        int elemento;
         switch (opcoes) {
             case 0:
                 break;
             case 1:
-                adicionarElementoNaTabela(tabelaHash);
+                cout << "[   INFO] QUAL VALOR DESEJA ADICIONA A TABELA?" << endl;
+                cin >> elemento;
+                tabelaHash->adicionar(elemento);
                 break;
             case 2:
-                removerElementoNaTabela(tabelaHash);
+                cout << "[   INFO] QUAL VALOR DESEJA REMOVER DA TABELA?" << endl;
+                cin >> elemento;
+                tabelaHash->remover(elemento);
                 break;
             case 3:
-                localizarElementoNaTabela(tabelaHash);
+                cout << "[   INFO] QUAL VALOR DESEJA LOCALIZAR NA TABELA?" << endl;
+                cin >> elemento;
+                if(tabelaHash->localizar(elemento)){
+                    cout << "[   INFO] ELEMENTO PRESENTE NA TABELA" << endl;
+                }else{
+                    cout << "[   INFO] ELEMENTO NÃO ENCONTRADO" << endl;
+                }
                 break;
             case 4:
                 tabelaHash->imprimir();
                 break;
-            case 5:
-                cout << "Fator de Carga: " << tabelaHash->obterFatorDeCarga() << endl;
-                break;
             default:
-                cout << "OPCAO INVALIDA. TENTE NOVAMENTE" << endl;
+                cout << "[WARNING] OPCAO INVALIDA. TENTE NOVAMENTE" << flush;
         }
     } while (opcoes != 0);
 
